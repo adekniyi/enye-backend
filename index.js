@@ -12,7 +12,7 @@ app.get('/api/rates',(req,res)=>{
     var toRe =fetch(`https://api.exchangeratesapi.io/latest?base=${req.query.base}&symbols=${req.query.currency.split(",")[0]},${req.query.currency.split(",")[1]},${req.query.currency.split(",")[2]}`)
     .then((resp) => resp.json())
     .then((data) => {
-        if(data==null||data==undefined){
+        if(data!=null||data!=undefined){
         res.json({result:{data}});
         }
         else{
