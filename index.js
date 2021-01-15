@@ -1,18 +1,20 @@
 const express = require('express');
 const momemt = require('moment');
+const fetch = require('node-fetch');
 
 
 const app = express();
 
-app.get('/',(req,res)=>{
+app.get('/api/rates',(req,res)=>{
 
-    console.log(req.query.currency);
-    console.log(req.query.currency.split(",")[1]);
+    // console.log(req.query.currency);
+    // console.log(req.query.currency.split(",")[1]);
+    var getData;
 
-     fetch(`https://api.exchangeratesapi.io/latest?base=${req.query.base}&symbols=${req.query.currency.split(",")[0]},${req.query.currency.split(",")[1]},${req.query.currency.split(",")[2]}`)
-    .then((res) => res.json())
+    var toRe =fetch(`https://api.exchangeratesapi.io/latest?base=${req.query.base}&symbols=${req.query.currency.split(",")[0]},${req.query.currency.split(",")[1]},${req.query.currency.split(",")[2]}`)
+    .then((resp) => resp.json())
     .then((data) => {
-        console.log(data)
+        res.json(data);
     }).catch((err) => console.log(err));
   
     var toRes = {
@@ -26,7 +28,6 @@ app.get('/',(req,res)=>{
             }
         }
     }
-    res.json(toRes);
 });
 
 const PORT = process.env.PORT || 4000;
