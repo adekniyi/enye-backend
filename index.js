@@ -7,26 +7,26 @@ const app = express();
 
 app.get('/api/rates',(req,res)=>{
 
-
-
+if(/\?.+/.test(req.url))
+{
     var toRe =fetch(`https://api.exchangeratesapi.io/latest?base=${req.query.base}&symbols=${req.query.currency.split(",")[0]},${req.query.currency.split(",")[1]},${req.query.currency.split(",")[2]}`)
     .then((resp) => resp.json())
     .then((data) => {
         res.json({result:{data}});
     }).catch((err) => console.log(err));
-  
-    var toRes = {
-        results:{
-            base:req.query.base,
-            date: momemt().format("YYYY-MM-D"),
-            rates:{
-                [req.query.currency.split(",")[0]] : 0.0377244605,
-                [req.query.currency.split(",")[1]] :0.033795458,
-                [req.query.currency.split(",")[2]] :0.044824204
-            }
-        }
-    }
+}else{
+    var toRe =fetch(`https://api.exchangeratesapi.io/latest`)
+    .then((resp) => resp.json())
+    .then((data) => {
+        res.json({result:{data}});
+    }).catch((err) => console.log(err));
+}
 });
+
+
+app.get('*', (req, res) => {
+    return res.status(404).send({error: 'Route not found'})
+})
 
 const PORT = process.env.PORT || 4000;
 
